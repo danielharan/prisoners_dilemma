@@ -7,6 +7,7 @@ class TestTitForTat < Test::Unit::TestCase
     tft = TitForTat.new
     assert_equal :cooperate, tft.play(:cooperate)
     assert_equal :defect,    tft.play(:defect)
+    assert_equal :cooperate, tft.play(nil)
   end
  
 end
