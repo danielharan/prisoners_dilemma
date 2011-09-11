@@ -1,6 +1,6 @@
 class AntiSocial
   
-  def play(opponents_last_play)
-    opponents_last_play || :defect
+  def play(opponents_plays)
+    opponents_plays.last || :defect
   end
 end

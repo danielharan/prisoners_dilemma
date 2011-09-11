@@ -1,6 +1,6 @@
 class TitForTat
   
-  def play(opponents_last_play)
-    opponents_last_play || :cooperate
+  def play(opponents_plays)
+    opponents_plays.last || :cooperate
   end
 end

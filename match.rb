@@ -2,11 +2,12 @@ class Match
   attr_accessor :plays
   
   def initialize(strategy1, strategy2, turns=100)
-    @plays = []
+    s1plays, s2plays = [], []
     (1..turns).collect do |turn|
-      prev1, prev2 = turn < 2 ? [nil, nil] : @plays[turn-2]
-      @plays << [strategy1.play(prev2),strategy2.play(prev1)]
+      s1plays << strategy1.play(s2plays)
+      s2plays << strategy2.play(s1plays[0..-2])
     end
+    @plays = s1plays.zip(s2plays)
   end
   
   def scores
