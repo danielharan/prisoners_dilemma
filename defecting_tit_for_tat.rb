@@ -5,6 +5,7 @@ class DefectingTitForTat < Strategy
   def initialize(turns=100,defect=1)
     @turns  = turns
     @defect = defect
+    super()
   end
 
   def play(opponents_plays)
