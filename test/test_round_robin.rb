@@ -30,4 +30,9 @@ class TestRoundRobin < Test::Unit::TestCase
     # 403 against TFT, 
     assert_equal 403 * 2 + 350 * 2 + 397, def1.score
   end
+  
+  # def test_speed_of_100_tournament
+  #   rr = RoundRobin.new([TitForTat.new] * 40 + [DefectingTitForTat.new(100,1)] * 40 + [AntiSocial.new] * 2)
+  #   # 1s+ -> 0.05s
+  # end
 end
