@@ -6,21 +6,18 @@ class RoundRobin
   # TODO: break apart concerns, and maybe avoid caching similar results in different sort orders
   # this stands for now because it's ~20-30X faster for a round of 100 instances
   def initialize(strategies)
-    cached_results = {}
+    @cached_results = Hash.new do |hash,key|
+      m = Match.new(*key)
+      m.run
+      hash[key] = [key[0].score,key[1].score]
+    end
+    
     self.class.round_robin(strategies) do |strat1, strat2|
-      if (cached_result = cached_results[[strat1.class,strat2.class]])
-        strat1.score += cached_result[0]
-        strat2.score += cached_result[1]
-      else
-        strat1_score_cache, strat2_score_cache = strat1.score, strat2.score
-        m = Match.new(strat1, strat2)
-        m.run
-        
-        cached_results[[strat1.class,strat2.class]] = [strat1.score, strat2.score]
-        
-        strat1.score += strat1_score_cache
-        strat2.score += strat2_score_cache
-      end
+      strat1_score_cache, strat2_score_cache = strat1.score, strat2.score
+      strat1.score = strat2.score = 0
+      
+      strat1.score = strat1_score_cache + @cached_results[[strat1,strat2]][0]
+      strat2.score = strat2_score_cache + @cached_results[[strat1,strat2]][1]
     end
   end
 
