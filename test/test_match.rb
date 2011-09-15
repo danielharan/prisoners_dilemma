@@ -1,41 +1,62 @@
 require "../match"
-require "../anti_social"
-require "../tit_for_tat"
 require "test/unit"
  
 class TestMatch < Test::Unit::TestCase
  
   def test_game
-    m = Match.new(AntiSocial.new, TitForTat.new, 10)
+    as  = AntiSocial.new
+    tft = TitForTat.new
+    m = Match.new(as, tft, 10)
+    m.run
     assert_equal 10, m.plays.length
-    assert_equal [35,35], m.scores
+    assert_equal 35, as.score
+    assert_equal 35, tft.score
   end
   
   def test_anti_social_game
-    m = Match.new(AntiSocial.new, AntiSocial.new)
+    as1 = AntiSocial.new
+    as2 = AntiSocial.new
+    m = Match.new(as1, as2)
+    m.run
     assert_equal 100, m.plays.length
-    assert_equal [100,100], m.scores
+    
+    assert_equal 100, as1.score
+    assert_equal 100, as2.score
   end
   
   def test_tit_for_tat_game
-    m = Match.new(TitForTat.new, TitForTat.new)
+    tft1 = TitForTat.new
+    tft2 = TitForTat.new
+    m = Match.new(tft1, tft2)
+    m.run
     assert_equal 100, m.plays.length
     
-    assert_equal [400,400], m.scores
+    assert_equal 400, tft1.score
+    assert_equal 400, tft2.score
   end
   
   def test_score_first_turn
-    m = Match.new(TitForTat.new, TitForTat.new, 1)
+    tft1 = TitForTat.new
+    tft2 = TitForTat.new
+    m = Match.new(tft1, tft2, 1)
     m.plays = [[:cooperate,:cooperate]]
-    assert_equal [4,4], m.scores
+    m.run
+    assert_equal 4, tft1.score
+    assert_equal 4, tft2.score
     
     m.plays = [[:defect,:cooperate]]
-    assert_equal [7,0], m.scores
+    m.run
+    assert_equal 7, tft1.score
+    assert_equal 0, tft2.score
     
     m.plays = [[:cooperate,:defect]]
-    assert_equal [0,7], m.scores
+    m.run
+    assert_equal 0, tft1.score
+    assert_equal 7, tft2.score
     
     m.plays = [[:defect,:defect]]
-    assert_equal [1,1], m.scores
+    m.run
+    assert_equal 1, tft1.score
+    assert_equal 1, tft2.score
   end
 end

@@ -1,4 +1,6 @@
-class DefectingTitForTat
+require File.dirname(__FILE__) + '/strategy'
+
+class DefectingTitForTat < Strategy
   
   def initialize(turns=100,defect=1)
     @turns  = turns
